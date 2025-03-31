@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Watch Party</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .video-container {
+            position: relative;
+            background-color: #1a202c;
+        }
+        .video-controls {
+            transition: opacity 0.3s ease;
+        }
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+        .emoji-picker {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="flex flex-col h-screen">
+        <!-- Video Grid -->
+        <div id="video-grid" class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 overflow-auto">
+            <!-- Local Video -->
+            <div class="video-container rounded-lg overflow-hidden">
+                <video id="local-video" autoplay muted class="w-full h-full object-cover"></video>
+                <div class="video-controls absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 opacity-0">
+                    <div class="flex items-center">
+                        <span class="font-medium">You</span>
+                        <div class="ml-auto flex space-x-2">
+                            <button id="toggle-video" class="p-2 bg-gray-700 rounded-full hover:bg-gray-600">
+                                <i class="fas fa-video"></i>
+                            </button>
+                            <button id="toggle-mic" class="p-2 bg-gray-700 rounded-full hover:bg-gray-600">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie Player -->
+        <div id="movie-player" class="hidden bg-black">
+            <video id="shared-movie" controls class="w-full"></video>
+        </div>
+
+        <!-- Main Controls -->
+        <div class="flex items-center p-4 bg-gray-800 space-x-4">
+            <button id="share-screen" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center">
+                <i class="fas fa-desktop mr-2"></i> Share Screen
+            </button>
+            <button id="toggle-movie" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center">
+                <i class="fas fa-film mr-2"></i> Watch Movie
+            </button>
+            <div class="flex-1 flex items-center justify-center space-x-4">
+                <button id="emoji-btn" class="p-2 bg-gray-700 rounded-full hover:bg-gray-600">
+                    <i class="far fa-smile"></i>
+                </button>
+                <button id="chat-btn" class="p-2 bg-gray-700 rounded-full hover:bg-gray-600">
+                    <i class="far fa-comment"></i>
+                </button>
+            </div>
+            <button id="leave-room" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center ml-auto">
+                <i class="fas fa-sign-out-alt mr-2"></i> Leave
+            </button>
+        </div>
+
+        <!-- Chat Panel -->
+        <div id="chat-panel" class="hidden bg-gray-800 h-64 flex flex-col">
+            <div class="flex-1 overflow-y-auto p-4 space-y-2" id="chat-messages">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="p-2 border-t border-gray-700 flex">
+                <input type="text" id="chat-input" placeholder="Type a message..." 
+                       class="flex-1 bg-gray-700 text-white p-2 rounded-l-lg focus:outline-none">
+                <button id="send-btn" class="bg-blue-600 hover:bg-blue-700 px-4 rounded-r-lg">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Emoji Picker -->
+        <div id="emoji-picker" class="emoji-picker hidden bg-gray-800 rounded-lg shadow-lg p-4 grid grid-cols-6 gap-2">
+            <!-- Emojis will be added dynamically -->
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
