@@ -70,56 +70,65 @@
             }
         }
 
-        function verifyCode() {
-            const digits = document.querySelectorAll('.digit-box');
-            const errorElement = document.getElementById('error-message');
-            let code = '';
+        function toggleRoomAction() {
+            const isCreate = document.getElementById('create-room').checked;
+            const digitBoxes = document.querySelectorAll('.digit-box');
             
-            digits.forEach(digit => {
-                code += digit.value;
-            });
-
-            errorElement.classList.add('hidden');
-            
-            if (code.length !== 6) {
-                errorElement.textContent = 'Please enter all 6 digits';
-                errorElement.classList.remove('hidden');
-                return;
+            if (isCreate) {
+                digitBoxes.forEach(box => {
+                    box.disabled = true;
+                    box.value = '';
+                });
+            } else {
+                digitBoxes.forEach(box => {
+                    box.disabled = false;
+                });
+                digitBoxes[0].focus();
             }
-
-            if (!/^\d+$/.test(code)) {
-                errorElement.textContent = 'Code must contain only numbers';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            // Simulate API call
-            errorElement.textContent = 'Verifying...';
-            errorElement.classList.remove('hidden');
-            
-            setTimeout(() => {
-                // This would be replaced with actual API call
-                if (code === '123456') { // Test code for demo
-                    errorElement.textContent = 'Verification successful!';
-                    errorElement.classList.remove('hidden');
-                    errorElement.classList.add('text-green-500');
-                } else {
-                    errorElement.textContent = 'Invalid verification code';
-                    errorElement.classList.remove('hidden');
-                    errorElement.classList.remove('text-green-500');
-                }
-            }, 1500);
         }
 
-        function resendCode(e) {
-            e.preventDefault();
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = 'New code sent to your device';
-            errorElement.classList.remove('hidden');
-            errorElement.classList.remove('text-green-500');
+        function handleRoomAction() {
+            const isCreate = document.getElementById('create-room').checked;
             
-            // In real app, this would trigger backend resend
-            console.log('Resend code requested');
+            if (isCreate) {
+                // Generate random 6-digit code
+                const code = Math.floor(100000 + Math.random() * 900000).toString();
+                document.getElementById('generated-code').textContent = code;
+                document.getElementById('room-code-display').classList.remove('hidden');
+                
+                // In real app, would create room on server
+                setTimeout(() => {
+                    window.location.href = `room.html?room=${code}`;
+                }, 2000);
+            } else {
+                // Join existing room
+                const digits = document.querySelectorAll('.digit-box');
+                let code = '';
+                
+                digits.forEach(digit => {
+                    code += digit.value;
+                });
+
+                if (code.length !== 6 || !/^\d+$/.test(code)) {
+                    alert('Please enter a valid 6-digit code');
+                    return;
+                }
+
+                // In real app, would verify room exists on server
+                window.location.href = `room.html?room=${code}`;
+            }
+        }
+
+        function copyRoomCode() {
+            const code = document.getElementById('generated-code').textContent;
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    const copyBtn = document.querySelector('#room-code-display button');
+                    copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="far fa-copy mr-1"></i> Copy Code';
+                    }, 2000);
+                });
         }
 
         // Auto-focus first input on load
