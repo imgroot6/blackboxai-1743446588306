@@ -10,3 +10,51 @@
     transform: scale(1.05);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 }
+
+/* Video call styles */
+.video-container {
+    position: relative;
+    background-color: #1a202c;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+}
+
+.video-controls {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.video-container:hover .video-controls {
+    opacity: 1;
+}
+
+.emoji-picker {
+    position: absolute;
+    bottom: 60px;
+    right: 20px;
+    z-index: 10;
+    background-color: #2d3748;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+#movie-player {
+    height: 0;
+    transition: height 0.3s ease;
+}
+
+#movie-player:not(.hidden) {
+    height: 400px;
+}
