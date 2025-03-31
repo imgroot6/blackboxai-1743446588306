@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6-Digit Verification</title>
+    <!-- Production-ready Tailwind via CLI -->
+    <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .digit-box {
+            transition: all 0.2s ease;
+        }
+        .digit-box:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Verification Code</h1>
+            <p class="text-gray-600 mt-2">Enter the 6-digit code sent to your device</p>
+        </div>
+
+        <div class="flex justify-center space-x-3 mb-8">
+            <input type="text" maxlength="1" class="digit-box w-12 h-16 text-3xl text-center border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" 
+                   oninput="moveToNext(this)" onkeydown="handleBackspace(event, this)">
+            <input type="text" maxlength="1" class="digit-box w-12 h-16 text-3xl text-center border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" 
+                   oninput="moveToNext(this)" onkeydown="handleBackspace(event, this)">
+            <input type="text" maxlength="1" class="digit-box w-12 h-16 text-3xl text-center border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" 
+                   oninput="moveToNext(this)" onkeydown="handleBackspace(event, this)">
+            <input type="text" maxlength="1" class="digit-box w-12 h-16 text-3xl text-center border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" 
+                   oninput="moveToNext(this)" onkeydown="handleBackspace(event, this)">
+            <input type="text" maxlength="1" class="digit-box w-12 h-16 text-3xl text-center border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" 
+                   oninput="moveToNext(this)" onkeydown="handleBackspace(event, this)">
+            <input type="text" maxlength="1" class="digit-box w-12 h-16 text-3xl text-center border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" 
+                   oninput="moveToNext(this)" onkeydown="handleBackspace(event, this)">
+        </div>
+
+        <div class="text-center">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200" onclick="verifyCode()">
+                Verify Code
+            </button>
+            <p class="text-gray-500 mt-4">
+                Didn't receive code? <a href="#" class="text-blue-600 hover:underline">Resend</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function moveToNext(input) {
+            if (input.value.length === 1) {
+                const nextInput = input.nextElementSibling;
+                if (nextInput) {
+                    nextInput.focus();
+                } else {
+                    input.blur();
+                }
+            }
+        }
+
+        function handleBackspace(event, input) {
+            if (event.key === 'Backspace' && input.value.length === 0) {
+                const prevInput = input.previousElementSibling;
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            }
+        }
+
+        function verifyCode() {
+            const digits = document.querySelectorAll('.digit-box');
+            const errorElement = document.getElementById('error-message');
+            let code = '';
+            
+            digits.forEach(digit => {
+                code += digit.value;
+            });
+
+            errorElement.classList.add('hidden');
+            
+            if (code.length !== 6) {
+                errorElement.textContent = 'Please enter all 6 digits';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!/^\d+$/.test(code)) {
+                errorElement.textContent = 'Code must contain only numbers';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            // Simulate API call
+            errorElement.textContent = 'Verifying...';
+            errorElement.classList.remove('hidden');
+            
+            setTimeout(() => {
+                // This would be replaced with actual API call
+                if (code === '123456') { // Test code for demo
+                    errorElement.textContent = 'Verification successful!';
+                    errorElement.classList.remove('hidden');
+                    errorElement.classList.add('text-green-500');
+                } else {
+                    errorElement.textContent = 'Invalid verification code';
+                    errorElement.classList.remove('hidden');
+                    errorElement.classList.remove('text-green-500');
+                }
+            }, 1500);
+        }
+
+        function resendCode(e) {
+            e.preventDefault();
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = 'New code sent to your device';
+            errorElement.classList.remove('hidden');
+            errorElement.classList.remove('text-green-500');
+            
+            // In real app, this would trigger backend resend
+            console.log('Resend code requested');
+        }
+
+        // Auto-focus first input on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.digit-box').focus();
+        });
+    </script>
+</body>
+</html>
